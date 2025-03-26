@@ -1,0 +1,31 @@
+package com.personal.ecommerce.repository;
+
+import com.personal.ecommerce.model.entity.UserEntity;
+import org.apache.catalina.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+@EnableJpaRepositories
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
+    @Query(value = "SELECT * FROM users u WHERE u.username = :usernameOrEmail OR u.email = :usernameOrEmail",
+            nativeQuery = true)
+    Optional<UserEntity> findByUsernameOrEmail(@Param("usernameOrEmail") String usernameOrEmail);
+    Optional<UserEntity> findByEmail(String username);
+    Boolean existsByEmail(String email);
+    Boolean existsByUsername(String username);
+    @Query(value = """
+            SELECT * FROM users u
+            WHERE lower(u.username) LIKE lower(concat('%', :keyword, '%')) OR
+            lower(u.email) LIKE lower(concat('%', :keyword, '%'))
+            """, nativeQuery = true)
+    Page<UserEntity> searchUser(String keyword, Pageable pageable);
+
+}

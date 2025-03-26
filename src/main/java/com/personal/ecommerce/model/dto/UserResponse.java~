@@ -1,0 +1,21 @@
+package com.personal.ecommerce.model.dto;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.security.Timestamp;
+import java.util.List;
+
+@Getter
+@Setter
+public class UserResponse {
+    private Long userId;
+    private String username;
+    private String email;
+    private Boolean enabled;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
+    private List<String> roles;
+
+    public static UserResponse 
+}

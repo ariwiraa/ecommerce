@@ -42,7 +42,7 @@ public class GenericExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public @ResponseBody BaseResponse<Object> handlerInternalServerErrorException(HttpServletRequest httpServletRequest,
                                                                   Exception exception) {
-        return BaseResponse.error("internal server error", exception.getMessage());
+        return BaseResponse.error(exception.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
