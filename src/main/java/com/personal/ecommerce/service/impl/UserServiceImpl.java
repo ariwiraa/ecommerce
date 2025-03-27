@@ -34,6 +34,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    /**
+     * Registers a new user to the system.
+     *
+     * @param request the registration request.
+     * @return a user response containing the registered user information.
+     * @throws ConflictException if the username or email already exists.
+     * @throws ResourceNotFoundException if the role cannot be found.
+     */
     @Override
     public UserResponse register(UserRegisterRequest request) {
         log.info("[UserService - register] started");

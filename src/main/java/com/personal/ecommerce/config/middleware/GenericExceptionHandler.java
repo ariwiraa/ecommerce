@@ -6,13 +6,21 @@ import com.personal.ecommerce.common.errors.ResourceNotFoundException;
 import com.personal.ecommerce.common.errors.UnauthorizedException;
 import com.personal.ecommerce.model.dto.BaseResponse;
 import com.personal.ecommerce.model.dto.ErrorResponse;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AccountStatusException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.AuthenticationException;
+import javax.naming.InsufficientResourcesException;
+import java.nio.file.AccessDeniedException;
+import java.security.SignatureException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -26,7 +34,7 @@ public class GenericExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public @ResponseBody BaseResponse<Object> handlerResourceNotFoundException(HttpServletRequest httpServletRequest,
-                                                                       ResourceNotFoundException exception) {
+                                                                               ResourceNotFoundException exception) {
 
         return BaseResponse.error(exception.getMessage());
     }
@@ -34,14 +42,24 @@ public class GenericExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public @ResponseBody BaseResponse<Object> handlerBadRequestException(HttpServletRequest httpServletRequest,
-                                                                        BadRequestException exception) {
+                                                                         BadRequestException exception) {
         return BaseResponse.error(exception.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public @ResponseBody BaseResponse<Object> handlerInternalServerErrorException(HttpServletRequest httpServletRequest,
-                                                                  Exception exception) {
+                                                                                  HttpServletResponse response,
+                                                                                  Exception exception) {
+        if (exception instanceof BadCredentialsException || exception instanceof AccessDeniedException ||
+                exception instanceof AccountStatusException || exception instanceof SignatureException ||
+                exception instanceof ExpiredJwtException || exception instanceof AuthenticationException ||
+                exception instanceof InsufficientResourcesException) {
+
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            return BaseResponse.error("internal server error", exception.getMessage());
+        }
+
         return BaseResponse.error("internal server error", exception.getMessage());
     }
 
@@ -55,7 +73,7 @@ public class GenericExceptionHandler {
     @ExceptionHandler(ConflictException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public @ResponseBody BaseResponse<Object> handlerConflictException(ConflictException ex,
-                                                                                  HttpServletRequest req) {
+                                                                       HttpServletRequest req) {
 
         return BaseResponse.error(ex.getMessage());
     }

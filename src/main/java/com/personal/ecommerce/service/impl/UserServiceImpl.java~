@@ -36,6 +36,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse register(UserRegisterRequest request) {
+        log.info("[UserService - register] started");
+
+        log.debug("[UserService - register] request: {}", request);
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new ConflictException("Username already exists");
         }
@@ -52,6 +55,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encodedPassword);
         user.setEnabled(true);
         userRepository.save(user);
+        log.info("[UserService - register] user: {}", user);
 
         RoleEntity role = roleRepository.findByName(String.valueOf(Role.ROLE_USER)).orElseThrow(() -> new
                 ResourceNotFoundException("Role not found"));
@@ -60,6 +64,7 @@ public class UserServiceImpl implements UserService {
         userRole.setId(new UserRoleEntity.UserRoleId(user.getUserId(), role.getRoleId()));
         userRoleRepository.save(userRole);
 
+        log.info("[UserService - register] ended");
         return UserResponse.fromUserAndRoles(user, List.of(String.valueOf(Role.ROLE_USER)));
     }
 
@@ -74,8 +79,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse findByUsernameOrEmail(String usernameOrEmail) {
-        UserEntity user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+        UserEntity user = userRepository.findByUsernameOrEmail(usernameOrEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        return null;
+
+        List<RoleEntity> roles = roleRepository.findByUserId(user.getUserId());
+
+        return UserResponse.fromUserAndRoles(user, roles.stream().map(RoleEntity::getName).toList());
     }
 }
