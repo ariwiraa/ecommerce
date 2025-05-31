@@ -1,0 +1,18 @@
+spring.application.name=Ecommerce
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/ecommerce
+spring.datasource.username=ecommerce_user
+spring.datasource.password=password@
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.show-sql=true
+
+# Server Configuration 
+spring.profiles.active=development
+server.port=8080
+#server.servlet.context-path=/api/v1
+
+# JWT
+jwt.secret=4753fd596408b5d9d2d51c34422d1adb51b14e60f69ddc8f4a18b2bed80b122d
+jwt.expiration-time=3h
+

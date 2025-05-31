@@ -1,9 +1,7 @@
 package com.personal.ecommerce.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -28,6 +26,8 @@ public class UserRoleEntity {
 
     @Embeddable
     @AllArgsConstructor
+    @NoArgsConstructor
+    @EqualsAndHashCode
     public static class UserRoleId {
         @Column(name = "user_id")
         private Long userId;

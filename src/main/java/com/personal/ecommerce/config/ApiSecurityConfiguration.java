@@ -29,7 +29,7 @@ public class ApiSecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**")
+                    registry.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "api/auth/**")
                             .permitAll().anyRequest().authenticated();
                 })
                 .sessionManagement(manager -> manager

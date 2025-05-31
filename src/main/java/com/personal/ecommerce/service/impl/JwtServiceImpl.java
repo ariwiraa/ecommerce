@@ -42,7 +42,7 @@ public class JwtServiceImpl implements JwtService {
                     .setSigningKey(secretKey)
                     .build();
 
-            jwtParser.parseClaimsJwt(token);
+            jwtParser.parseClaimsJws(token);
 
             return true;
         } catch (Exception e) {
@@ -57,6 +57,6 @@ public class JwtServiceImpl implements JwtService {
                 .setSigningKey(secretKey)
                 .build();
 
-        return jwtParser.parseClaimsJwt(token).getBody().getSubject();
+        return jwtParser.parseClaimsJws(token).getBody().getSubject();
     }
 }
