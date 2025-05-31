@@ -45,10 +45,7 @@ public class ProductEntity {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @ManyToMany
-    @JoinTable(name = "product_category",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    @ManyToMany(mappedBy = "products")
     private List<CategoryEntity> categories;
 
 }
