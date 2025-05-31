@@ -7,6 +7,7 @@ import com.personal.ecommerce.model.dto.ProductResponse;
 import com.personal.ecommerce.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/product")
+@SecurityRequirement(name = "Bearer")
 public class ProductController {
 
     @Autowired

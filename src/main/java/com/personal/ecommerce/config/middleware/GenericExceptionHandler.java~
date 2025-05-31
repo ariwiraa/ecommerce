@@ -51,9 +51,12 @@ public class GenericExceptionHandler {
     public @ResponseBody BaseResponse<Object> handlerInternalServerErrorException(HttpServletRequest httpServletRequest,
                                                                                   HttpServletResponse response,
                                                                                   Exception exception) {
-        if (exception instanceof BadCredentialsException || exception instanceof AccessDeniedException ||
-                exception instanceof AccountStatusException || exception instanceof SignatureException ||
-                exception instanceof ExpiredJwtException || exception instanceof AuthenticationException ||
+        if (exception instanceof BadCredentialsException ||
+                exception instanceof AccessDeniedException ||
+                exception instanceof AccountStatusException ||
+                exception instanceof SignatureException ||
+                exception instanceof ExpiredJwtException ||
+                exception instanceof AuthenticationException ||
                 exception instanceof InsufficientResourcesException) {
 
             response.setStatus(HttpStatus.FORBIDDEN.value());

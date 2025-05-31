@@ -57,6 +57,16 @@ public class ProductServiceImpl implements ProductService {
 
             ProductEntity productEntity = productRepository.save(product);
 
+            for (CategoryEntity category : categoryEntities) {
+                ProductCategoryEntity productCategoryEntity = new ProductCategoryEntity();
+                ProductCategoryId productCategoryId = new ProductCategoryId();
+                productCategoryId.setProductId(productEntity.getProductId());
+                productCategoryId.setCategoryId(category.getCategoryId());
+
+                productCategoryEntity.setId(productCategoryId);
+                productCategoryRepository.save(productCategoryEntity);
+            }
+
             log.info("[ProductService - createProduct] ended");
         } catch (ResourceNotFoundException e) {
             throw new RuntimeException(e);

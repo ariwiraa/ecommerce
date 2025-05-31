@@ -1,0 +1,51 @@
+package com.personal.ecommerce.controller;
+
+import com.personal.ecommerce.model.dto.BaseResponse;
+import com.personal.ecommerce.model.dto.UserInfo;
+import com.personal.ecommerce.model.dto.UserRegisterRequest;
+import com.personal.ecommerce.model.dto.UserResponse;
+import com.personal.ecommerce.model.entity.RoleEntity;
+import com.personal.ecommerce.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.apache.catalina.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("api/user")
+@SecurityRequirement(name = "Bearer")
+public class UserController {
+    @Autowired
+    private UserService userService;
+
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<BaseResponse<UserResponse>> findByUserId(@PathVariable("userId") Long userId) {
+        UserResponse userResponse = userService.findByUserId(userId);
+
+        return ResponseEntity.ok(BaseResponse.success("success get user", userResponse));
+    }
+
+    @GetMapping
+    public ResponseEntity<BaseResponse<UserResponse>> findByUsernameOrEmail(@RequestParam("usernameOrEmail")
+                                                                                String usernameOrEmail) {
+        UserResponse userResponse = userService.findByUsernameOrEmail(usernameOrEmail);
+
+        return ResponseEntity.ok(BaseResponse.success("success get user", userResponse));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<BaseResponse<UserResponse>> getMe() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserInfo userInfo = (UserInfo) authentication.getPrincipal();
+
+        UserResponse userResponse = UserResponse.fromUserAndRoles(userInfo.getUser(),
+                userInfo.getRoles().stream().map(RoleEntity::getName).toList());
+
+        return ResponseEntity.ok(BaseResponse.success("success get user", userResponse));
+    }
+}
