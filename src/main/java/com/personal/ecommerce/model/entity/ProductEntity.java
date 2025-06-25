@@ -37,6 +37,9 @@ public class ProductEntity {
     @Column(name = "weight", nullable = false)
     private BigDecimal weight;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private Timestamp createdAt;

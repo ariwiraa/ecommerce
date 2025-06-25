@@ -1,5 +1,6 @@
 package com.personal.ecommerce.model.dto;
 
+import com.personal.ecommerce.model.entity.UserEntity;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,4 +30,6 @@ public class ProductRequest {
     private BigDecimal weight;
 
     private List<Long> categories;
+
+    private UserEntity user;
 }
