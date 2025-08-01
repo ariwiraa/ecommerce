@@ -1,9 +1,6 @@
 package com.personal.ecommerce.config.middleware;
 
-import com.personal.ecommerce.common.errors.BadRequestException;
-import com.personal.ecommerce.common.errors.ConflictException;
-import com.personal.ecommerce.common.errors.ResourceNotFoundException;
-import com.personal.ecommerce.common.errors.UnauthorizedException;
+import com.personal.ecommerce.common.errors.*;
 import com.personal.ecommerce.model.dto.BaseResponse;
 import com.personal.ecommerce.model.dto.ErrorResponse;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -81,6 +78,14 @@ public class GenericExceptionHandler {
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public @ResponseBody BaseResponse<Object> handlerInternalServerErrorException(UnauthorizedException ex,
+                                                                                  HttpServletRequest req) {
+
+        return BaseResponse.error(ex.getMessage());
+    }
+
+    @ExceptionHandler(ForbiddenAccessException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public @ResponseBody BaseResponse<Object> handlerInternalServerErrorException(ForbiddenAccessException ex,
                                                                                   HttpServletRequest req) {
 
         return BaseResponse.error(ex.getMessage());

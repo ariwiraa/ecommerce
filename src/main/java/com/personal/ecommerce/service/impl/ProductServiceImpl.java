@@ -54,6 +54,7 @@ public class ProductServiceImpl implements ProductService {
             product.setStockQuantity(request.getStockQuantity() != null ? request.getStockQuantity() : 0);
             product.setWeight(request.getWeight() != null ? request.getWeight() : BigDecimal.valueOf(0));
             product.setCategories(categoryEntities);
+            product.setUserId(request.getUser().getUserId());
 
             ProductEntity productEntity = productRepository.save(product);
 

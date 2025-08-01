@@ -1,9 +1,6 @@
 package com.personal.ecommerce.controller;
 
-import com.personal.ecommerce.model.dto.BaseResponse;
-import com.personal.ecommerce.model.dto.PaginatedProductResponse;
-import com.personal.ecommerce.model.dto.ProductRequest;
-import com.personal.ecommerce.model.dto.ProductResponse;
+import com.personal.ecommerce.model.dto.*;
 import com.personal.ecommerce.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,6 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -30,6 +29,10 @@ public class ProductController {
     @PostMapping()
     public ResponseEntity<BaseResponse<String>> createProduct(@RequestBody ProductRequest payload) {
         try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserInfo userInfo = (UserInfo) authentication.getPrincipal();
+
+            payload.setUser(userInfo.getUser());
             String response = productService.createProduct(payload);
 
             return ResponseEntity.ok(BaseResponse.success("success create product", response));
