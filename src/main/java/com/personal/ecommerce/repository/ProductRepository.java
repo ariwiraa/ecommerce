@@ -28,4 +28,11 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
             SELECT * FROM product
             """, nativeQuery = true)
     Page<ProductEntity> findByPageable(Pageable pageable);
+
+    @Query(value = """
+            SELECT p.*
+            FROM product p
+            WHERE p.product_id IN (:productIds)
+            """, nativeQuery = true)
+    List<ProductEntity> findByProductIds(@Param("productIds") List<Long> productIds);
 }

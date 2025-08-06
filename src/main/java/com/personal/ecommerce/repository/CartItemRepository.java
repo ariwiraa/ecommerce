@@ -24,9 +24,17 @@ public interface CartItemRepository extends JpaRepository<CartItemEntity, Long> 
             FROM cart_items ci
             WHERE ci.cart_id = :cartId AND ci.product_id = :productId
             """, nativeQuery = true)
-    CartItemEntity findByCartIdAndProductId(@Param("userId")Long cartId, @Param("productId")Long productId);
+    CartItemEntity findByCartIdAndProductId(@Param("cartId")Long cartId, @Param("productId")Long productId);
 
     @Modifying
     @Query(value = "DELETE FROM cart_items WHERE cart_id = :cartId", nativeQuery = true)
     void deleteAllByCartId(Long cartId);
+
+    @Query(value = """
+            SELECT ci.*
+            FROM cart_items ci
+            LEFT JOIN carts c ON ci.cart_id = c.cart_id
+            WHERE ci.cart_id = :cartId AND ci.product_id IN (:productIds)
+            """, nativeQuery = true)
+    List<CartItemEntity> findByCartIdAndProductIds(@Param("cartId")Long cartId, @Param("productIds")List<Long> productIds);
 }

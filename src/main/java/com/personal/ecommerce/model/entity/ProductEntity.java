@@ -32,7 +32,7 @@ public class ProductEntity {
     private BigDecimal price;
 
     @Column(name = "stock_quantity", nullable = false)
-    private Integer stockQuantity;
+    private Integer stockQuantity; 
 
     @Column(name = "weight", nullable = false)
     private BigDecimal weight;
